@@ -1,7 +1,7 @@
-"""AI Assistant for CareRisk AI — OpenAI Responses API integration.
+"""AI Assistant for CareRisk AI — Groq API integration.
 
 API key is read from Streamlit secrets:
-    st.secrets.get("OPENAI_API_KEY")
+    st.secrets.get("GROQ_API_KEY")
 
 No responses are cached. Every question produces a fresh, contextual answer
 based on the exact question asked, the patient's input values, and the
@@ -10,7 +10,7 @@ ML prediction result.
 
 from typing import List, Dict, Any, Optional, Union
 import streamlit as st
-from openai import OpenAI
+from groq import Groq
 
 
 def _format_patient_data(patient_data: Any) -> str:
@@ -50,15 +50,15 @@ def get_ai_response(
     risk_level: str,
     top_factors: Any,
 ) -> str:
-    """Call OpenAI Responses API and return a dynamic, question-specific response.
+    """Call Groq API and return a dynamic, question-specific response.
 
     Returns:
         String containing the AI explanation or an error/unavailable message.
     """
-    api_key = st.secrets.get("OPENAI_API_KEY")
+    api_key = st.secrets.get("GROQ_API_KEY")
 
     if not api_key:
-        return "AI assistant is unavailable. Please add OPENAI_API_KEY in Streamlit secrets."
+        return "AI assistant is unavailable. Please add GROQ_API_KEY in Streamlit secrets."
 
     # Format probability if it's a float/decimal
     prob_val = probability
@@ -72,10 +72,9 @@ def get_ai_response(
     factors_summary = _format_top_factors(top_factors)
 
     try:
-        client = OpenAI(api_key=api_key)
+        client = Groq(api_key=api_key)
 
-        prompt = f"""
-You are CareRisk AI, a helpful healthcare ML explanation assistant.
+        prompt = f"""You are CareRisk AI, a helpful healthcare ML explanation assistant.
 
 Disease: {disease_type}
 Prediction Result: {prediction_result}
@@ -91,25 +90,34 @@ Top Risk Factors:
 User Question:
 {question}
 
-Answer rules:
-- Answer the exact question asked.
-- Use patient values only when relevant.
-- Do not give final medical diagnosis.
-- Do not prescribe medicines.
-- Give simple lifestyle guidance only.
-- Keep answer under 120 words.
-- Be friendly and clear.
-- Always end with a short medical disclaimer.
-"""
+Rules:
+* Answer the exact question asked.
+* Use patient values only when relevant.
+* Do not repeat same generic response.
+* Do not diagnose disease.
+* Do not prescribe medicines.
+* Give simple lifestyle guidance only.
+* Keep answer under 120 words.
+* Be friendly and clear.
+* End with a short medical disclaimer."""
 
-        response = client.responses.create(
-            model="gpt-4.1-mini",
-            input=prompt,
+        completion = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
             temperature=0.7,
-            max_output_tokens=250,
+            max_tokens=250,
         )
 
-        return response.output_text
+        answer = completion.choices[0].message.content
+        if answer:
+            return answer.strip()
+        else:
+            return "🤔 The AI returned an empty response. Please try rephrasing your question."
 
     except Exception as e:
-        return f"AI response failed. Please check your OpenAI API key or billing. Error: {str(e)}"
+        return f"AI response failed. Please check your Groq API key or billing. Error: {str(e)}"

@@ -18,7 +18,7 @@ It is designed as a clean, professional, resume-worthy, and deployment-ready pro
 - **Diabetes, Heart Disease, and Stroke** prediction pages
 - **Real ML training pipeline** — 11 models compared per disease
 - **Human-readable risk explanations** — no raw SHAP values shown to users
-- **🤖 AI Assistant ("Ask CareRisk AI")** — OpenAI-powered follow-up Q&A after prediction
+- **🤖 AI Assistant ("Ask CareRisk AI")** — Groq-powered follow-up Q&A after prediction
 - **Professional PDF reports** with colour-coded risk level, readable factors, next steps
 - **Model comparison dashboard** with Plotly charts
 - **Graceful error handling** — no crashes if models, API key, or PDFs fail
@@ -35,7 +35,7 @@ After each prediction, users can ask follow-up questions like:
 - *"How can I reduce my risk?"*
 - *"Explain my result in simple words."*
 
-The AI assistant uses **OpenAI** to provide short, friendly, plain-language explanations that:
+The AI assistant uses **Groq** to provide short, friendly, plain-language explanations that:
 - Never give a diagnosis
 - Never prescribe medicines
 - Always recommend consulting a doctor
@@ -43,7 +43,7 @@ The AI assistant uses **OpenAI** to provide short, friendly, plain-language expl
 
 ### Set up the AI assistant locally
 
-1. Get your **OpenAI API key** from: https://platform.openai.com/api-keys
+1. Get your **Groq API key** from: https://console.groq.com/keys
 
 2. Create the secrets file (copy the template):
 
@@ -54,7 +54,7 @@ cp .streamlit/secrets.toml.example .streamlit/secrets.toml
 3. Open `.streamlit/secrets.toml` and replace the placeholder:
 
 ```toml
-OPENAI_API_KEY = "your_openai_api_key_here"
+GROQ_API_KEY = "your_groq_api_key_here"
 ```
 
 4. ⚠️ **Never push `secrets.toml` to GitHub!** It is already in `.gitignore` to prevent leaks.
@@ -66,13 +66,13 @@ OPENAI_API_KEY = "your_openai_api_key_here"
 3. Add:
 
 ```toml
-OPENAI_API_KEY = "your_actual_openai_key_here"
+GROQ_API_KEY = "your_actual_groq_key_here"
 ```
 
 4. Save and redeploy.
 
 > If no API key is found, the AI assistant gracefully shows:
-> *"AI assistant is unavailable. Please add OPENAI_API_KEY in Streamlit secrets."*
+> *"AI assistant is unavailable. Please add GROQ_API_KEY in Streamlit secrets."*
 
 ---
 
@@ -105,7 +105,7 @@ The best model is selected using **ROC-AUC** by default (falls back to F1-score)
 | UI | Streamlit, Vanilla CSS, Inter font |
 | ML | scikit-learn, XGBoost, LightGBM, CatBoost |
 | Explainability | SHAP + rule-based medical thresholds |
-| AI Assistant | OpenAI (via `openai`) |
+| AI Assistant | Groq (via `groq`) |
 | Visualization | Plotly Express |
 | PDF Reports | FPDF |
 | Data | Pandas, NumPy |
@@ -236,7 +236,7 @@ streamlit run app.py
 3. Set main file: `app.py`
 4. Under **Settings → Secrets**, add:
    ```toml
-   OPENAI_API_KEY = "your_openai_api_key_here"
+   GROQ_API_KEY = "your_groq_api_key_here"
    ```
 5. Deploy. Done!
 
@@ -270,7 +270,7 @@ Each prediction generates a PDF containing:
 ## 💼 Resume Bullets
 
 - Built **CareRisk AI**, a full-stack Streamlit healthcare ML platform predicting diabetes, heart disease, and stroke risk using 11 ML models (XGBoost, LightGBM, CatBoost, Voting, Stacking).
-- Implemented **OpenAI AI assistant** feature allowing users to ask plain-language follow-up questions about ML predictions.
+- Implemented **Groq AI assistant** feature allowing users to ask plain-language follow-up questions about ML predictions.
 - Engineered human-readable risk explanations using SHAP + medical threshold rules — eliminating confusing raw model scores from the user interface.
 - Generated **professional PDF reports** with colour-coded results, risk factor summaries, and medical disclaimers.
 - Deployed a **production-ready, crash-resilient** multipage Streamlit app on Streamlit Community Cloud with graceful error handling for missing models, API keys, and failures.
