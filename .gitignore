@@ -2,6 +2,7 @@
 venv/
 .env/
 .venv/
+cat >> .gitignore << 'EOF'
 
 # Secret/env files
 .env
