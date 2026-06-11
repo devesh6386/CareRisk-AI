@@ -1,94 +1,128 @@
 # 🩺 CareRisk AI
 
-CareRisk AI is a complete Streamlit machine learning healthcare platform that predicts disease risk for:
+CareRisk AI is a professional, demo-ready Streamlit healthcare ML platform that predicts disease risk for:
 
-1. Diabetes
-2. Heart Disease
-3. Stroke
+1. 🩸 Diabetes
+2. ❤️ Heart Disease
+3. 🧠 Stroke
 
 It is designed as a clean, professional, resume-worthy, and deployment-ready project for Streamlit Community Cloud.
 
-> ⚠️ Medical disclaimer: This project is for educational and portfolio purposes only. It is not medical advice, not a diagnosis tool, and must not replace consultation with a qualified doctor.
+> ⚠️ **Medical Disclaimer:** This project is for educational and portfolio purposes only. It is NOT medical advice, NOT a diagnosis tool, and must NOT replace consultation with a qualified doctor.
 
 ---
 
 ## 🚀 Features
 
-- Modern Streamlit multipage UI
-- Diabetes, Heart Disease, and Stroke prediction pages
-- Real ML training pipeline
-- Ensemble learning support
-- Model comparison table
-- Plotly model performance chart
-- SHAP explainability with fallback feature importance
-- PDF report generation using FPDF
-- Graceful handling for missing datasets or missing models
-- Deployment-ready GitHub structure
+- **Modern Streamlit multipage UI** with Inter font, glassmorphism cards, and micro-animations
+- **Diabetes, Heart Disease, and Stroke** prediction pages
+- **Real ML training pipeline** — 11 models compared per disease
+- **Human-readable risk explanations** — no raw SHAP values shown to users
+- **🤖 AI Assistant ("Ask CareRisk AI")** — Gemini-powered follow-up Q&A after prediction
+- **Professional PDF reports** with colour-coded risk level, readable factors, next steps
+- **Model comparison dashboard** with Plotly charts
+- **Graceful error handling** — no crashes if models, API key, or PDFs fail
+- **Deployment-ready** for Streamlit Community Cloud
+
+---
+
+## 🤖 AI Assistant — Ask CareRisk AI
+
+After each prediction, users can ask follow-up questions like:
+
+- *"Why am I high risk?"*
+- *"Which factors affected my result?"*
+- *"How can I reduce my risk?"*
+- *"Explain my result in simple words."*
+- *"What should I discuss with my doctor?"*
+
+The AI assistant uses **Google Gemini** to provide short, friendly, plain-language explanations that:
+- Never give a diagnosis
+- Never prescribe medicines
+- Always recommend consulting a doctor
+- Always include a medical disclaimer
+
+### Set up the AI assistant locally
+
+1. Get a **free Gemini API key** from: https://aistudio.google.com/app/apikey
+
+2. Create the secrets file (copy the template):
+
+```bash
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+```
+
+3. Open `.streamlit/secrets.toml` and replace the placeholder:
+
+```toml
+GEMINI_API_KEY = "your_actual_api_key_here"
+```
+
+4. ⚠️ **Never push `secrets.toml` to GitHub!** It is already in `.gitignore`.
+
+### Set up on Streamlit Community Cloud
+
+1. Open your app on **share.streamlit.io**
+2. Go to **Settings → Secrets**
+3. Add:
+
+```toml
+GEMINI_API_KEY = "your_actual_api_key_here"
+```
+
+4. Save and redeploy.
+
+> If no API key is found, the AI assistant gracefully shows:
+> *"AI assistant is unavailable. Add GEMINI_API_KEY in Streamlit secrets to enable this feature."*
 
 ---
 
 ## 🧠 ML Models Included
 
-The training utility compares the following models:
+The training utility compares these models per disease:
 
-- Logistic Regression
-- Decision Tree Classifier
-- Random Forest Classifier
-- Bagging Classifier
-- AdaBoost Classifier
-- Gradient Boosting Classifier
-- XGBoost Classifier
-- LightGBM Classifier
-- CatBoost Classifier
-- Voting Classifier
-- Stacking Classifier
+| # | Model |
+|---|-------|
+| 1 | Logistic Regression |
+| 2 | Decision Tree |
+| 3 | Random Forest |
+| 4 | Bagging Classifier |
+| 5 | AdaBoost |
+| 6 | Gradient Boosting |
+| 7 | XGBoost |
+| 8 | LightGBM |
+| 9 | CatBoost |
+| 10 | Voting Classifier |
+| 11 | Stacking Classifier |
 
-The best model is selected using ROC-AUC by default. If ROC-AUC is unavailable, F1-score is used.
+The best model is selected using **ROC-AUC** by default (falls back to F1-score).
 
 ---
 
 ## 🧰 Tech Stack
 
-- Python
-- Streamlit
-- Pandas
-- NumPy
-- Scikit-learn
-- XGBoost
-- LightGBM
-- CatBoost
-- SHAP
-- Plotly
-- Joblib
-- FPDF
+| Layer | Technology |
+|---|---|
+| UI | Streamlit, Vanilla CSS, Inter font |
+| ML | scikit-learn, XGBoost, LightGBM, CatBoost |
+| Explainability | SHAP + rule-based medical thresholds |
+| AI Assistant | Google Gemini (via `google-genai`) |
+| Visualization | Plotly Express |
+| PDF Reports | FPDF |
+| Data | Pandas, NumPy |
+| Serialization | Joblib |
 
 ---
 
 ## 📊 Datasets
 
-Download these datasets from Kaggle and place the CSV files inside the `data/` folder.
+Download these from Kaggle and place them in the `data/` folder:
 
-| Disease | Kaggle Dataset | Expected File Name |
+| Disease | Kaggle Dataset | File Name |
 |---|---|---|
 | Diabetes | Pima Indians Diabetes Database | `data/diabetes.csv` |
 | Heart Disease | Heart Disease Dataset by johnsmith88 | `data/heart.csv` |
 | Stroke | Stroke Prediction Dataset by fedesoriano | `data/stroke.csv` |
-
-Dataset links:
-
-- Pima Indians Diabetes Database: `https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database`
-- Heart Disease Dataset by johnsmith88: `https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset`
-- Stroke Prediction Dataset by fedesoriano: `https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset`
-
-### Expected target columns
-
-| File | Target Column |
-|---|---|
-| `diabetes.csv` | `Outcome` |
-| `heart.csv` | `target` |
-| `stroke.csv` | `stroke` |
-
-If your CSV has slightly different target names, edit `utils/preprocessing.py`.
 
 ---
 
@@ -97,10 +131,14 @@ If your CSV has slightly different target names, edit `utils/preprocessing.py`.
 ```text
 CareRisk-AI/
 │
-├── app.py
+├── app.py                          # Main Streamlit homepage
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
+│
+├── .streamlit/
+│   ├── secrets.toml.example        # ✅ Safe to commit (template only)
+│   └── secrets.toml                # ❌ NEVER commit (add to .gitignore)
 │
 ├── data/
 │   ├── diabetes.csv
@@ -113,14 +151,17 @@ CareRisk-AI/
 │   ├── stroke_model.pkl
 │   ├── diabetes_scaler.pkl
 │   ├── heart_scaler.pkl
-│   └── stroke_scaler.pkl
+│   ├── stroke_scaler.pkl
+│   └── metrics.json
 │
 ├── utils/
 │   ├── preprocessing.py
 │   ├── model_training.py
 │   ├── prediction.py
-│   ├── explainability.py
-│   └── report_generator.py
+│   ├── explainability.py           # Human-readable risk factors
+│   ├── ai_assistant.py             # Gemini AI Q&A
+│   ├── report_generator.py         # Professional PDF generation
+│   └── css.py                      # Custom CSS injection
 │
 ├── pages/
 │   ├── 1_Diabetes_Prediction.py
@@ -148,13 +189,8 @@ cd CareRisk-AI
 
 ```bash
 python -m venv venv
-source venv/bin/activate
-```
-
-For Windows:
-
-```bash
-venv\Scripts\activate
+source venv/bin/activate      # Mac/Linux
+# venv\Scripts\activate       # Windows
 ```
 
 ### 3. Install dependencies
@@ -165,7 +201,7 @@ pip install -r requirements.txt
 
 ### 4. Add datasets
 
-Download the Kaggle CSV files and place them like this:
+Download from Kaggle and place:
 
 ```text
 data/diabetes.csv
@@ -179,19 +215,14 @@ data/stroke.csv
 python -m utils.model_training --all
 ```
 
-This will create model files in the `models/` folder:
+### 6. (Optional) Set up AI Assistant
 
-```text
-models/diabetes_model.pkl
-models/heart_model.pkl
-models/stroke_model.pkl
-models/diabetes_scaler.pkl
-models/heart_scaler.pkl
-models/stroke_scaler.pkl
-models/metrics.json
+```bash
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+# Then add your Gemini API key inside secrets.toml
 ```
 
-### 6. Run Streamlit app
+### 7. Run the app
 
 ```bash
 streamlit run app.py
@@ -199,89 +230,54 @@ streamlit run app.py
 
 ---
 
-## 🧪 Train One Disease Model Only
-
-```bash
-python -m utils.model_training --disease diabetes
-python -m utils.model_training --disease heart
-python -m utils.model_training --disease stroke
-```
-
-Choose model-selection metric:
-
-```bash
-python -m utils.model_training --disease diabetes --metric roc_auc
-python -m utils.model_training --disease stroke --metric f1
-```
-
----
-
 ## ☁️ Deploy on Streamlit Community Cloud
 
-1. Push this project to GitHub.
-2. Make sure `requirements.txt` is in the root folder.
-3. Train models locally first.
-4. Commit the generated `.pkl` model files inside the `models/` folder.
-5. Go to Streamlit Community Cloud.
-6. Create a new app from your GitHub repository.
-7. Set main file path:
-
-```text
-app.py
-```
-
-8. Deploy.
-
-If model files are missing, the app will not crash. It will show:
-
-```text
-Please train models first.
-```
+1. Push the project to GitHub (model `.pkl` files must be committed).
+2. Go to **share.streamlit.io** → New app → connect your repo.
+3. Set main file: `app.py`
+4. Under **Settings → Secrets**, add:
+   ```toml
+   GEMINI_API_KEY = "your_key_here"
+   ```
+5. Deploy. Done!
 
 ---
 
-## 🧠 How Prediction Works
+## 🔒 Security Notes
 
-1. User enters clinical values in Streamlit form.
-2. Input is converted to a Pandas DataFrame.
-3. Saved preprocessor/scaler transforms the input.
-4. Saved best model predicts disease risk.
-5. Probability is converted into risk level:
-
-| Probability | Risk Level |
+| File | Action |
 |---|---|
-| Below 40% | Low Risk |
-| 40% to 70% | Medium Risk |
-| Above 70% | High Risk |
+| `.streamlit/secrets.toml` | ❌ Never commit — already in `.gitignore` |
+| `.streamlit/secrets.toml.example` | ✅ Safe to commit — template only |
+| `.env` | ❌ Never commit — already in `.gitignore` |
 
 ---
 
-## 📄 PDF Report
+## 📄 PDF Reports
 
-Each prediction page can generate a PDF report containing:
+Each prediction generates a PDF containing:
 
-- Disease type
-- Prediction result
-- Risk probability
-- Risk level
-- Patient input values
-- Important risk factors
+- CareRisk AI branding header
+- Disease type and timestamp
+- Risk level (colour-coded)
+- Model confidence percentage + visual bar
+- Patient-entered health values
+- Top risk factors (human-readable, no raw SHAP numbers)
+- Suggested next steps
 - Medical disclaimer
 
 ---
 
 ## 💼 Resume Bullets
 
-You can write this project on your resume like this:
-
-- Built CareRisk AI, a Streamlit-based healthcare ML platform for diabetes, heart disease, and stroke risk prediction.
-- Trained and compared 11 machine learning models including XGBoost, LightGBM, CatBoost, Voting, and Stacking classifiers.
-- Implemented modular preprocessing, model training, model loading, prediction, explainability, and PDF report generation pipelines.
-- Added SHAP-based explainability with fallback feature importance for model interpretability.
-- Deployed a production-ready multipage Streamlit application with graceful error handling and downloadable patient risk reports.
+- Built **CareRisk AI**, a full-stack Streamlit healthcare ML platform predicting diabetes, heart disease, and stroke risk using 11 ML models (XGBoost, LightGBM, CatBoost, Voting, Stacking).
+- Implemented **Gemini AI assistant** feature allowing users to ask plain-language follow-up questions about ML predictions.
+- Engineered human-readable risk explanations using SHAP + medical threshold rules — eliminating confusing raw model scores from the user interface.
+- Generated **professional PDF reports** with colour-coded results, risk factor summaries, and medical disclaimers.
+- Deployed a **production-ready, crash-resilient** multipage Streamlit app on Streamlit Community Cloud with graceful error handling for missing models, API keys, and failures.
 
 ---
 
 ## ⚠️ Medical Disclaimer
 
-CareRisk AI is not a medical device. It does not provide diagnosis, treatment, or medical advice. The predictions are generated using machine learning models trained on public datasets and may be inaccurate. Always consult a qualified healthcare professional for medical decisions.
+CareRisk AI is **not a medical device**. It does not provide diagnosis, treatment, or medical advice. The predictions are generated using machine learning models trained on publicly available datasets and **may be inaccurate**. Risk scores are probabilistic estimates — not certainties. Always consult a qualified and licensed healthcare professional for medical decisions.

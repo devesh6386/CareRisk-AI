@@ -1,13 +1,16 @@
-# Python virtual environment
+# Python virtual environments
 venv/
 .env/
 .venv/
-cat >> .gitignore << 'EOF'
 
-# Secret/env files
+# Environment Variables / Secrets
 .env
 .env.local
 .env.*.local
+.streamlit/secrets.toml
+
+# Do NOT ignore the example secrets file
+!.streamlit/secrets.toml.example
 
 # Python cache
 __pycache__/
@@ -20,9 +23,6 @@ __pycache__/
 
 # Jupyter
 .ipynb_checkpoints/
-
-# Streamlit secrets
-.streamlit/secrets.toml
 
 # Logs
 *.log

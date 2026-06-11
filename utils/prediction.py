@@ -19,6 +19,7 @@ def load_model_bundle(disease: str):
     """Load model and preprocessor from disk.
 
     The saved scaler file is a complete sklearn ColumnTransformer preprocessor.
+    Returns (model, preprocessor, error_message_or_None).
     """
     config = get_config(disease)
     model_path = config["model_path"]
@@ -36,7 +37,7 @@ def load_model_bundle(disease: str):
 
 
 def probability_to_risk(probability: float) -> str:
-    """Convert probability into risk label."""
+    """Convert probability into a user-friendly risk label."""
     if probability < 0.40:
         return "Low Risk"
     if probability <= 0.70:
@@ -45,7 +46,7 @@ def probability_to_risk(probability: float) -> str:
 
 
 def risk_color(risk_level: str) -> str:
-    """Return display color for risk level."""
+    """Return a display color hex string for the given risk level."""
     colors = {
         "Low Risk": "#16a34a",
         "Medium Risk": "#f59e0b",
@@ -55,7 +56,7 @@ def risk_color(risk_level: str) -> str:
 
 
 def _predict_probability(model, X_processed) -> float:
-    """Safely calculate positive-class probability."""
+    """Safely calculate positive-class probability from any sklearn-compatible model."""
     if hasattr(model, "predict_proba"):
         proba = model.predict_proba(X_processed)
         if proba.shape[1] == 1:
@@ -71,7 +72,18 @@ def _predict_probability(model, X_processed) -> float:
 
 
 def predict_disease(input_dict: Dict[str, Any], disease: str) -> Dict[str, Any]:
-    """Common prediction function used by all disease pages."""
+    """Core prediction function used by all disease pages.
+
+    Returns a result dict containing:
+      - prediction        : int (0 or 1)
+      - probability       : float (0-1)
+      - probability_percent: float
+      - risk_level        : str
+      - risk_color        : str
+      - model_used        : str (technical, hidden from main UI)
+      - top_factors       : list of dicts with human-readable 'explanation' field
+      - input_df          : raw DataFrame (used internally by report generator)
+    """
     model, preprocessor, error = load_model_bundle(disease)
     config = get_config(disease)
 
@@ -90,15 +102,24 @@ def predict_disease(input_dict: Dict[str, Any], disease: str) -> Dict[str, Any]:
 
         probability = _predict_probability(model, X_processed)
         prediction = int(probability >= 0.5)
-        risk_level = probability_to_risk(probability)
-        top_factors = get_top_risk_factors(X_processed, model, feature_names, top_n=5)
+        level = probability_to_risk(probability)
+
+        # Pass raw input_dict so explainability can generate human-readable text
+        top_factors = get_top_risk_factors(
+            input_data=X_processed,
+            model=model,
+            feature_names=feature_names,
+            top_n=5,
+            disease_type=disease,
+            raw_input_dict=input_dict,
+        )
 
         return {
             "prediction": prediction,
             "probability": probability,
             "probability_percent": round(probability * 100, 2),
-            "risk_level": risk_level,
-            "risk_color": risk_color(risk_level),
+            "risk_level": level,
+            "risk_color": risk_color(level),
             "model_used": model.__class__.__name__,
             "top_factors": top_factors,
             "input_df": input_df,

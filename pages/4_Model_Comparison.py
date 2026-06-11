@@ -5,11 +5,6 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-st.set_page_config(page_title="Model Comparison | CareRisk AI", page_icon="📊", layout="wide")
-
-BASE_DIR = Path(__file__).resolve().parents[1]
-METRICS_PATH = BASE_DIR / "models" / "metrics.json"
-
 from utils.css import inject_custom_css
 
 st.set_page_config(page_title="Model Comparison | CareRisk AI", page_icon="📊", layout="wide")

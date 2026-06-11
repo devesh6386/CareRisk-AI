@@ -44,7 +44,7 @@ with m1:
 with m2:
     st.markdown("""<div class="metric-card"><h3>11+</h3><p>Algorithms Compared</p></div>""", unsafe_allow_html=True)
 with m3:
-    st.markdown("""<div class="metric-card"><h3>SHAP</h3><p>Explainability</p></div>""", unsafe_allow_html=True)
+    st.markdown("""<div class="metric-card"><h3>🤖 AI</h3><p>Ask CareRisk AI</p></div>""", unsafe_allow_html=True)
 with m4:
     st.markdown("""<div class="metric-card"><h3>PDF</h3><p>Clinical Reports</p></div>""", unsafe_allow_html=True)
 
