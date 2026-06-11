@@ -77,13 +77,13 @@ def render_ai_section(input_data: dict, result: dict):
         <div class="ai-section">
             <div class="ai-section-title">🤖 Ask CareRisk AI</div>
             <p style="opacity:0.8; font-size:0.95rem; margin-bottom:0.5rem;">
-                Ask a follow-up question about your heart disease risk result.
+                Ask any question about your heart disease risk result. Try one of these:
             </p>
             <div class="question-chips">
                 <span class="question-chip">💬 Why am I high risk?</span>
                 <span class="question-chip">📊 Which factors affected my result?</span>
                 <span class="question-chip">🔽 How can I reduce my risk?</span>
-                <span class="question-chip">🗣️ Explain in simple words</span>
+                <span class="question-chip">🗣️ What is heart disease?</span>
                 <span class="question-chip">🩺 What should I discuss with my doctor?</span>
             </div>
         </div>
@@ -102,7 +102,7 @@ def render_ai_section(input_data: dict, result: dict):
             st.warning("Please type a question before clicking the button.")
         else:
             with st.spinner("CareRisk AI is thinking..."):
-                response = get_ai_response(
+                user_message, tech_error = get_ai_response(
                     question=question,
                     disease_type="Heart Disease",
                     patient_data=input_data,
@@ -112,9 +112,14 @@ def render_ai_section(input_data: dict, result: dict):
                     top_factors=result["top_factors"],
                 )
             st.markdown(
-                f'<div class="ai-response-box">{response}</div>',
+                f'<div class="ai-response-box">{user_message}</div>',
                 unsafe_allow_html=True,
             )
+            # Show technical error only if API call failed
+            if tech_error:
+                with st.expander("🔧 Technical Error Details (for developers)"):
+                    st.code(tech_error, language="text")
+
 
 
 # ---------------------------------------------------------------------------
