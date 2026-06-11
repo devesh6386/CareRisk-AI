@@ -3,44 +3,47 @@ import pandas as pd
 
 from utils.prediction import predict_diabetes
 from utils.report_generator import generate_report
+from utils.css import inject_custom_css
 
 st.set_page_config(page_title="Diabetes Prediction | CareRisk AI", page_icon="🩸", layout="wide")
+inject_custom_css()
 
 
 def result_card(result):
     color = result["risk_color"]
+    prob = result['probability_percent']
     st.markdown(
         f"""
-        <div style="padding:1.4rem;border-radius:18px;border-left:8px solid {color};background:#ffffff;box-shadow:0 8px 25px rgba(15,23,42,0.08);">
-            <h2 style="margin:0;color:{color};">{result['risk_level']}</h2>
-            <p style="font-size:1.1rem;margin-top:0.5rem;">Risk Probability: <b>{result['probability_percent']}%</b></p>
-            <p>Model Used: <b>{result['model_used']}</b></p>
+        <div class="risk-card" style="border-left: 8px solid {color} !important;">
+            <h2 style="color: {color} !important; margin: 0 0 0.5rem 0;">{result['risk_level']} Risk Profile</h2>
+            <p style="margin: 0.5rem 0 !important; font-size: 1.15rem;">Risk Probability: <strong>{prob}%</strong></p>
+            <p style="margin: 0.5rem 0 !important; font-size: 1.15rem;">Active Estimator: <strong>{result['model_used']}</strong></p>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    st.progress(float(prob) / 100.0)
 
 
-st.title("🩸 Diabetes Risk Prediction")
-st.caption("Enter clinical values from the Pima Indians Diabetes feature set.")
-st.warning("This is not medical advice. Use this project for learning and portfolio demonstration only.")
+st.markdown('<div class="section-title">🩸 Diabetes Risk Screening</div>', unsafe_allow_html=True)
+st.caption("Provide patient physiological data to generate risk probabilities.")
 
 with st.form("diabetes_form"):
-    c1, c2, c3, c4 = st.columns(4)
+    st.markdown("##### 👤 Patient Diagnostics")
+    c1, c2 = st.columns(2)
     with c1:
-        Pregnancies = st.number_input("Pregnancies", min_value=0, max_value=20, value=1)
-        Glucose = st.number_input("Glucose", min_value=0.0, max_value=300.0, value=120.0)
+        Pregnancies = st.number_input("Pregnancies", min_value=0, max_value=20, value=1, help="Number of times pregnant")
+        Glucose = st.number_input("Glucose Concentration", min_value=0.0, max_value=300.0, value=120.0, help="2-hour oral glucose tolerance test")
+        BloodPressure = st.number_input("Diastolic Blood Pressure (mm Hg)", min_value=0.0, max_value=200.0, value=70.0)
+        SkinThickness = st.number_input("Triceps Skin Fold Thickness (mm)", min_value=0.0, max_value=100.0, value=20.0)
     with c2:
-        BloodPressure = st.number_input("BloodPressure", min_value=0.0, max_value=200.0, value=70.0)
-        SkinThickness = st.number_input("SkinThickness", min_value=0.0, max_value=100.0, value=20.0)
-    with c3:
-        Insulin = st.number_input("Insulin", min_value=0.0, max_value=900.0, value=80.0)
-        BMI = st.number_input("BMI", min_value=0.0, max_value=80.0, value=28.0)
-    with c4:
-        DiabetesPedigreeFunction = st.number_input("DiabetesPedigreeFunction", min_value=0.0, max_value=3.0, value=0.45)
-        Age = st.number_input("Age", min_value=1, max_value=120, value=35)
+        Insulin = st.number_input("2-Hour Serum Insulin (mu U/ml)", min_value=0.0, max_value=900.0, value=80.0)
+        BMI = st.number_input("Body Mass Index (BMI)", min_value=0.0, max_value=80.0, value=28.0)
+        DiabetesPedigreeFunction = st.number_input("Diabetes Pedigree Function", min_value=0.0, max_value=3.0, value=0.45, help="Genetic family history score")
+        Age = st.number_input("Age (years)", min_value=1, max_value=120, value=35)
 
-    submitted = st.form_submit_button("🔍 Predict Diabetes Risk", use_container_width=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    submitted = st.form_submit_button("🔍 Run Diabetes Risk Analysis", use_container_width=True)
 
 if submitted:
     input_data = {
@@ -60,22 +63,38 @@ if submitted:
         st.warning(result["error"])
         st.info("Run: `python -m utils.model_training --disease diabetes` after adding `data/diabetes.csv`.")
     else:
-        result_card(result)
-        st.divider()
+        st.markdown('<div class="section-title">📊 Analysis Output</div>', unsafe_allow_html=True)
+        col_res, col_space = st.columns([1.5, 1])
+        with col_res:
+            result_card(result)
 
-        col1, col2 = st.columns([1, 1])
+        col1, col2 = st.columns([1.2, 1])
         with col1:
             st.subheader("📌 Important Risk Factors")
             factors = result.get("top_factors", [])
             if factors:
-                factor_df = pd.DataFrame(factors)
-                factor_df["importance"] = factor_df["importance"].round(4)
-                st.dataframe(factor_df, use_container_width=True, hide_index=True)
+                for f in factors:
+                    feat_name = f["feature"]
+                    importance_pct = min(100.0, max(0.0, float(f["importance"]) * 100.0))
+                    st.markdown(
+                        f"""
+                        <div style="margin-bottom: 0.8rem; background-color: var(--secondary-background-color); padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid var(--secondary-background-color);">
+                            <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--text-color);">
+                                <span>{feat_name}</span>
+                                <span>{f['importance']:.4f}</span>
+                            </div>
+                            <div style="background-color: rgba(0,0,0,0.1); border-radius: 6px; height: 8px; width: 100%;">
+                                <div style="background: linear-gradient(90deg, #0ea5e9, #8b5cf6); height: 100%; border-radius: 6px; width: {importance_pct}%;"></div>
+                            </div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
             else:
                 st.info("Feature importance is not available for this model.")
 
         with col2:
-            st.subheader("📄 Download Report")
+            st.subheader("📄 Download Clinical Report")
             pdf_bytes = generate_report(
                 patient_data=input_data,
                 disease_type="Diabetes",
@@ -85,11 +104,19 @@ if submitted:
                 top_factors=result["top_factors"],
             )
             st.download_button(
-                label="Download PDF Report",
+                label="📥 Download PDF Report",
                 data=pdf_bytes,
                 file_name="diabetes_risk_report.pdf",
                 mime="application/pdf",
                 use_container_width=True,
             )
 
-        st.error("⚠️ This prediction is generated by an ML model and is not a medical diagnosis.")
+        st.markdown(
+            """
+            <div class="disclaimer-box">
+                <p>⚠️ <strong>Medical Disclaimer:</strong> This prediction is generated by an ML model and is not a medical diagnosis. 
+                Always consult a qualified healthcare professional for medical decisions.</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
