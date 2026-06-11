@@ -110,6 +110,37 @@ def local_css():
             color: var(--text-color);
             opacity: 0.7;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 2rem 1.2rem;
+                border-radius: 16px;
+            }
+            .main-header h1 {
+                font-size: 2.2rem;
+            }
+            .main-header p {
+                font-size: 1rem;
+            }
+            .metric-card {
+                padding: 1rem;
+            }
+            .metric-card h3 {
+                font-size: 1.8rem;
+            }
+            .feature-card {
+                padding: 1.2rem;
+            }
+            .feature-card h3 {
+                font-size: 1.1rem;
+                flex-direction: column;
+                text-align: center;
+            }
+            .feature-card p {
+                text-align: center;
+            }
+        }
         </style>
         """,
         unsafe_allow_html=True,
