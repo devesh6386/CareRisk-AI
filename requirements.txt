@@ -10,4 +10,4 @@ matplotlib
 plotly
 joblib
 fpdf
-google-genai
+openai

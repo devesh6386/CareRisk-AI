@@ -83,8 +83,7 @@ def render_ai_section(input_data: dict, result: dict):
                 <span class="question-chip">💬 Why am I high risk?</span>
                 <span class="question-chip">📊 Which factors affected my result?</span>
                 <span class="question-chip">🔽 How can I reduce my risk?</span>
-                <span class="question-chip">🗣️ What is a stroke?</span>
-                <span class="question-chip">🩺 What should I discuss with my doctor?</span>
+                <span class="question-chip">🗣️ Explain my result in simple words.</span>
             </div>
         </div>
         """,
@@ -102,7 +101,7 @@ def render_ai_section(input_data: dict, result: dict):
             st.warning("Please type a question before clicking the button.")
         else:
             with st.spinner("CareRisk AI is thinking..."):
-                user_message, tech_error = get_ai_response(
+                answer = get_ai_response(
                     question=question,
                     disease_type="Stroke",
                     patient_data=input_data,
@@ -111,14 +110,9 @@ def render_ai_section(input_data: dict, result: dict):
                     risk_level=result["risk_level"],
                     top_factors=result["top_factors"],
                 )
-            st.markdown(
-                f'<div class="ai-response-box">{user_message}</div>',
-                unsafe_allow_html=True,
-            )
-            # Show technical error only if API call failed
-            if tech_error:
-                with st.expander("🔧 Technical Error Details (for developers)"):
-                    st.code(tech_error, language="text")
+            st.markdown('<div class="ai-response-box">', unsafe_allow_html=True)
+            st.markdown(answer)
+            st.markdown('</div>', unsafe_allow_html=True)
 
 
 

@@ -18,7 +18,7 @@ It is designed as a clean, professional, resume-worthy, and deployment-ready pro
 - **Diabetes, Heart Disease, and Stroke** prediction pages
 - **Real ML training pipeline** — 11 models compared per disease
 - **Human-readable risk explanations** — no raw SHAP values shown to users
-- **🤖 AI Assistant ("Ask CareRisk AI")** — Gemini-powered follow-up Q&A after prediction
+- **🤖 AI Assistant ("Ask CareRisk AI")** — OpenAI-powered follow-up Q&A after prediction
 - **Professional PDF reports** with colour-coded risk level, readable factors, next steps
 - **Model comparison dashboard** with Plotly charts
 - **Graceful error handling** — no crashes if models, API key, or PDFs fail
@@ -34,9 +34,8 @@ After each prediction, users can ask follow-up questions like:
 - *"Which factors affected my result?"*
 - *"How can I reduce my risk?"*
 - *"Explain my result in simple words."*
-- *"What should I discuss with my doctor?"*
 
-The AI assistant uses **Google Gemini** to provide short, friendly, plain-language explanations that:
+The AI assistant uses **OpenAI** to provide short, friendly, plain-language explanations that:
 - Never give a diagnosis
 - Never prescribe medicines
 - Always recommend consulting a doctor
@@ -44,7 +43,7 @@ The AI assistant uses **Google Gemini** to provide short, friendly, plain-langua
 
 ### Set up the AI assistant locally
 
-1. Get a **free Gemini API key** from: https://aistudio.google.com/app/apikey
+1. Get your **OpenAI API key** from: https://platform.openai.com/api-keys
 
 2. Create the secrets file (copy the template):
 
@@ -55,10 +54,10 @@ cp .streamlit/secrets.toml.example .streamlit/secrets.toml
 3. Open `.streamlit/secrets.toml` and replace the placeholder:
 
 ```toml
-GEMINI_API_KEY = "your_actual_api_key_here"
+OPENAI_API_KEY = "your_openai_api_key_here"
 ```
 
-4. ⚠️ **Never push `secrets.toml` to GitHub!** It is already in `.gitignore`.
+4. ⚠️ **Never push `secrets.toml` to GitHub!** It is already in `.gitignore` to prevent leaks.
 
 ### Set up on Streamlit Community Cloud
 
@@ -67,13 +66,13 @@ GEMINI_API_KEY = "your_actual_api_key_here"
 3. Add:
 
 ```toml
-GEMINI_API_KEY = "your_actual_api_key_here"
+OPENAI_API_KEY = "your_actual_openai_key_here"
 ```
 
 4. Save and redeploy.
 
 > If no API key is found, the AI assistant gracefully shows:
-> *"AI assistant is unavailable. Add GEMINI_API_KEY in Streamlit secrets to enable this feature."*
+> *"AI assistant is unavailable. Please add OPENAI_API_KEY in Streamlit secrets."*
 
 ---
 
@@ -106,7 +105,7 @@ The best model is selected using **ROC-AUC** by default (falls back to F1-score)
 | UI | Streamlit, Vanilla CSS, Inter font |
 | ML | scikit-learn, XGBoost, LightGBM, CatBoost |
 | Explainability | SHAP + rule-based medical thresholds |
-| AI Assistant | Google Gemini (via `google-genai`) |
+| AI Assistant | OpenAI (via `openai`) |
 | Visualization | Plotly Express |
 | PDF Reports | FPDF |
 | Data | Pandas, NumPy |
@@ -237,7 +236,7 @@ streamlit run app.py
 3. Set main file: `app.py`
 4. Under **Settings → Secrets**, add:
    ```toml
-   GEMINI_API_KEY = "your_key_here"
+   OPENAI_API_KEY = "your_openai_api_key_here"
    ```
 5. Deploy. Done!
 
@@ -271,7 +270,7 @@ Each prediction generates a PDF containing:
 ## 💼 Resume Bullets
 
 - Built **CareRisk AI**, a full-stack Streamlit healthcare ML platform predicting diabetes, heart disease, and stroke risk using 11 ML models (XGBoost, LightGBM, CatBoost, Voting, Stacking).
-- Implemented **Gemini AI assistant** feature allowing users to ask plain-language follow-up questions about ML predictions.
+- Implemented **OpenAI AI assistant** feature allowing users to ask plain-language follow-up questions about ML predictions.
 - Engineered human-readable risk explanations using SHAP + medical threshold rules — eliminating confusing raw model scores from the user interface.
 - Generated **professional PDF reports** with colour-coded results, risk factor summaries, and medical disclaimers.
 - Deployed a **production-ready, crash-resilient** multipage Streamlit app on Streamlit Community Cloud with graceful error handling for missing models, API keys, and failures.
