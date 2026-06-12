@@ -34,35 +34,35 @@ st.markdown('<div class="section-title">💡 Understanding Healthcare ML Metrics
 c1, c2, c3, c4, c5 = st.columns(5)
 with c1:
     st.markdown("""
-        <div class="feature-card" style="padding:1.2rem; min-height: 200px;">
+        <div class="metric-card" style="padding:1.2rem; min-height: 200px;">
             <h4 style="margin:0 0 0.5rem 0; color:#0284c7;">🎯 Accuracy</h4>
             <p style="font-size:0.85rem !important;">Percentage of correctly classified patients. Good overall measure but can be misleading on imbalanced datasets.</p>
         </div>
     """, unsafe_allow_html=True)
 with c2:
     st.markdown("""
-        <div class="feature-card" style="padding:1.2rem; min-height: 200px;">
+        <div class="metric-card" style="padding:1.2rem; min-height: 200px;">
             <h4 style="margin:0 0 0.5rem 0; color:#0284c7;">🔬 Precision</h4>
             <p style="font-size:0.85rem !important;">Of all predicted high-risk patients, how many were actually high-risk. Minimizes False Positives.</p>
         </div>
     """, unsafe_allow_html=True)
 with c3:
     st.markdown("""
-        <div class="feature-card" style="padding:1.2rem; min-height: 200px;">
+        <div class="metric-card" style="padding:1.2rem; min-height: 200px;">
             <h4 style="margin:0 0 0.5rem 0; color:#0284c7;">📢 Recall (Sensitivity)</h4>
             <p style="font-size:0.85rem !important;">Percentage of actual high-risk patients correctly identified. Crucial in clinical setups to avoid missing patients.</p>
         </div>
     """, unsafe_allow_html=True)
 with c4:
     st.markdown("""
-        <div class="feature-card" style="padding:1.2rem; min-height: 200px;">
+        <div class="metric-card" style="padding:1.2rem; min-height: 200px;">
             <h4 style="margin:0 0 0.5rem 0; color:#0284c7;">⚖️ F1-Score</h4>
             <p style="font-size:0.85rem !important;">Harmonic mean of Precision and Recall. Essential metric when seeking a balanced clinical classifier.</p>
         </div>
     """, unsafe_allow_html=True)
 with c5:
     st.markdown("""
-        <div class="feature-card" style="padding:1.2rem; min-height: 200px;">
+        <div class="metric-card" style="padding:1.2rem; min-height: 200px;">
             <h4 style="margin:0 0 0.5rem 0; color:#0284c7;">📈 ROC-AUC</h4>
             <p style="font-size:0.85rem !important;">Area Under the ROC Curve. Measures how well the model distinguishes between risk levels across all probability thresholds.</p>
         </div>

@@ -1,338 +1,421 @@
 import streamlit as st
 
-
 def inject_custom_css():
     """Inject all custom CSS for the CareRisk AI app."""
     st.markdown(
         """
         <style>
         /* ===================================================
-           Global & typography
+           Global & Typography (Healthcare SaaS Theme)
         =================================================== */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         html, body, [class*="css"] {
             font-family: 'Inter', sans-serif !important;
+            background-color: var(--background-color) !important;
+            color: var(--text-color) !important;
         }
 
         :root {
-            --primary-gradient: linear-gradient(135deg, #0f766e 0%, #0284c7 50%, #6d28d9 100%);
-            --card-radius: 20px;
+            --primary-blue: #2563eb;
+            --primary-teal: #0f766e;
+            --primary-purple: #7c3aed;
+            --bg-color: var(--background-color);
+            --text-dark: var(--text-color);
+            --text-muted: gray;
+            --card-white: var(--secondary-background-color);
+            --card-radius: 16px;
+        }
+
+        /* Ensure Streamlit containers take less empty space */
+        .block-container {
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+            max-width: 1100px !important; /* Centered max-width container */
         }
 
         /* ===================================================
-           Hero card (home page)
+           Sidebar Styling
         =================================================== */
-        .hero-card {
-            padding: 3.5rem 2.5rem;
-            border-radius: 24px;
-            background: linear-gradient(135deg, #0f766e 0%, #0284c7 50%, #6d28d9 100%);
-            color: #ffffff !important;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 20px 40px rgba(2, 132, 199, 0.18);
+        [data-testid="stSidebar"] {
+            background-color: var(--secondary-background-color) !important;
+            border-right: 1px solid rgba(128, 128, 128, 0.2) !important;
+        }
+
+        .sidebar-card {
+            background-color: var(--background-color) !important;
+            border-radius: 12px !important;
+            padding: 1rem !important;
+            margin-bottom: 1.5rem !important;
+            border: 1px solid rgba(128, 128, 128, 0.2) !important;
             text-align: center;
         }
 
-        .hero-card h1 {
+        /* ===================================================
+           Hero Section (Homepage)
+        =================================================== */
+        .hero-section {
+            padding: 4rem 2.5rem;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(37,99,235,0.95) 0%, rgba(15,118,110,0.95) 100%), 
+                        url('https://www.transparenttextures.com/patterns/cubes.png');
+            color: #ffffff !important;
+            margin-bottom: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.25);
+            text-align: center;
+            backdrop-filter: blur(10px); /* Glassmorphism */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-title {
             font-size: 3.5rem !important;
             font-weight: 800 !important;
             color: #ffffff !important;
-            margin-bottom: 0.8rem !important;
-            border: none !important;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            margin-bottom: 1rem !important;
+            letter-spacing: -0.025em;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .hero-card p {
+        .hero-subtitle {
             font-size: 1.25rem !important;
-            color: rgba(255, 255, 255, 0.95) !important;
-            max-width: 800px;
-            margin: 0 auto !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+            max-width: 750px;
+            margin: 0 auto 2rem auto !important;
             line-height: 1.6 !important;
+            font-weight: 400 !important;
         }
+
+        /* Hero buttons injected via st.button or st.page_link will be styled generally, 
+           but we can target them if wrapped nicely */
 
         /* ===================================================
-           Section titles
+           Section Titles
         =================================================== */
         .section-title {
-            font-size: 2rem !important;
+            font-size: 1.75rem !important;
             font-weight: 700 !important;
-            margin-top: 2.5rem !important;
+            margin-top: 3rem !important;
             margin-bottom: 1.5rem !important;
-            color: var(--text-color) !important;
+            color: var(--text-dark) !important;
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(128, 128, 128, 0.2);
         }
 
         /* ===================================================
-           Metric cards (home page counters)
+           Metric Cards
         =================================================== */
         .metric-card {
-            background-color: var(--background-color) !important;
-            border: 1px solid var(--secondary-background-color) !important;
-            border-radius: var(--card-radius);
-            padding: 1.75rem;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            background-color: var(--card-white) !important;
+            border: 1px solid rgba(128, 128, 128, 0.2) !important;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: left;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .metric-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.12);
-            border-color: #0284c7 !important;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: var(--primary-blue) !important;
         }
 
         .metric-card h3 {
             margin: 0 !important;
-            font-size: 2.5rem !important;
+            font-size: 2.25rem !important;
             font-weight: 800 !important;
-            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-blue) !important;
+            line-height: 1;
         }
 
-        .metric-card p {
-            margin: 0.5rem 0 0 0 !important;
+        .metric-card p.title {
+            margin: 0 !important;
             font-size: 1.1rem !important;
             font-weight: 600 !important;
-            color: var(--text-color) !important;
+            color: var(--text-dark) !important;
+        }
+
+        .metric-card p.desc {
+            margin: 0 !important;
+            font-size: 0.875rem !important;
+            color: var(--text-muted) !important;
+            line-height: 1.4;
         }
 
         /* ===================================================
-           Feature cards
+           Disease Cards & CTA Buttons
         =================================================== */
-        /* Coordinate the hover state on the column container so card + button lift in unison */
-        div[data-testid="column"]:has(.feature-card) {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        }
-
-        div[data-testid="column"]:has(.feature-card):hover {
-            transform: translateY(-6px) !important;
-        }
-
-        .feature-card {
-            background-color: var(--background-color) !important;
-            border: 1px solid var(--secondary-background-color) !important;
+        .disease-card {
+            background-color: var(--card-white) !important;
+            border: 1px solid rgba(128, 128, 128, 0.2) !important;
             border-radius: var(--card-radius);
             padding: 2rem;
             height: 100%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease !important;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
         }
 
-        .feature-card:hover {
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.12);
-            border-color: #0284c7 !important;
+        div[data-testid="column"]:has(.disease-card):hover {
+            transform: translateY(-6px) !important;
         }
 
-        .feature-card h3 {
-            margin: 0 0 1rem 0 !important;
-            font-size: 1.35rem !important;
+        div[data-testid="column"]:has(.disease-card):hover .disease-card {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-blue) !important;
+        }
+
+        .disease-card h3 {
+            margin: 0 0 0.75rem 0 !important;
+            font-size: 1.5rem !important;
             font-weight: 700 !important;
-            color: var(--text-color) !important;
+            color: var(--text-dark) !important;
         }
 
-        .feature-card p {
+        .disease-card p {
             font-size: 1rem !important;
             line-height: 1.6 !important;
-            color: var(--text-color) !important;
-            opacity: 0.85;
-            margin: 0 !important;
+            color: var(--text-muted) !important;
+            margin-bottom: 1.5rem !important;
+            flex-grow: 1;
         }
 
-        /* Cohesive button styling inside the column */
-        div:has(> .feature-card) + div:has(> [data-testid="stPageLink"]) {
-            margin-top: -0.5rem !important;
+        .disease-tag {
+            display: inline-block;
+            background-color: rgba(128, 128, 128, 0.15);
+            color: var(--text-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        div:has(> .feature-card) + div:has(> [data-testid="stPageLink"]) a {
+        /* St.page_link styling inside disease columns */
+        div:has(> .disease-card) + div:has(> [data-testid="stPageLink"]) {
+            margin-top: -1rem !important;
+        }
+
+        div:has(> .disease-card) + div:has(> [data-testid="stPageLink"]) a {
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            background: linear-gradient(135deg, #0f766e 0%, #0284c7 100%) !important;
+            background-color: var(--primary-blue) !important;
             color: #ffffff !important;
             border: none !important;
-            padding: 0.8rem 1.5rem !important;
-            border-radius: 14px !important;
+            padding: 1rem 1.5rem !important;
+            border-radius: 12px !important;
             text-decoration: none !important;
             font-weight: 600 !important;
-            font-size: 1rem !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.15) !important;
+            font-size: 1.05rem !important;
+            width: 100% !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
         }
 
-        div:has(> .feature-card) + div:has(> [data-testid="stPageLink"]) a:hover {
-            background: linear-gradient(135deg, #0d9488 0%, #0369a1 100%) !important;
-            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.25) !important;
+        div:has(> .disease-card) + div:has(> [data-testid="stPageLink"]) a:hover {
+            background-color: #1d4ed8 !important; /* darker blue */
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
             color: #ffffff !important;
+        }
+
+        /* Global primary button styling for st.button / st.page_link where applicable */
+        .cta-button button, .cta-button a {
+            background-color: var(--primary-teal) !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 12px !important;
+            border: none !important;
+        }
+        
+        .cta-button button:hover, .cta-button a:hover {
+            background-color: #0f766e !important;
         }
 
         /* ===================================================
-           Risk result card — coloured left border
+           Prediction Pages (Risk Cards & Form Cards)
         =================================================== */
-        .risk-card {
-            padding: 2rem 2.4rem;
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-            background-color: var(--background-color) !important;
-            border: 1px solid var(--secondary-background-color) !important;
-            margin-bottom: 1.5rem;
-            transition: transform 0.25s ease;
+        [data-testid="stForm"] {
+            background-color: var(--card-white) !important;
+            border: 1px solid rgba(128, 128, 128, 0.2) !important;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
         }
 
-        .risk-card:hover {
-            transform: translateY(-2px);
+        .risk-card {
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            background-color: var(--card-white) !important;
+            border: 1px solid rgba(128, 128, 128, 0.2) !important;
+            margin-bottom: 2rem;
         }
 
         .risk-card h2 {
             margin: 0 0 0.5rem 0 !important;
-            font-size: 2rem !important;
+            font-size: 2.5rem !important;
             font-weight: 800 !important;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.025em;
         }
 
         .risk-card p {
-            margin: 0.4rem 0 !important;
-            font-size: 1.1rem !important;
-            color: var(--text-color) !important;
+            margin: 0.5rem 0 !important;
+            font-size: 1.15rem !important;
+            color: var(--text-dark) !important;
         }
 
-        /* ===================================================
-           Risk factor cards — inline readable explanations
-        =================================================== */
         .factor-card {
-            margin-bottom: 0.85rem;
-            background-color: var(--secondary-background-color);
-            padding: 0.85rem 1.2rem;
-            border-radius: 14px;
-            border-left: 4px solid #0ea5e9;
-            transition: border-color 0.2s ease;
-        }
-
-        .factor-card:hover {
-            border-left-color: #8b5cf6;
+            margin-bottom: 1rem;
+            background-color: var(--background-color);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary-blue);
+            border-top: 1px solid rgba(128, 128, 128, 0.2);
+            border-right: 1px solid rgba(128, 128, 128, 0.2);
+            border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .factor-number {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            width: 22px;
-            height: 22px;
-            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            width: 28px;
+            height: 28px;
+            background-color: var(--primary-blue);
             color: white;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             border-radius: 50%;
-            margin-right: 0.5rem;
             flex-shrink: 0;
-            vertical-align: middle;
         }
 
         .factor-text {
-            font-size: 0.93rem;
-            line-height: 1.55;
-            color: var(--text-color);
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--text-dark);
+            font-weight: 500;
         }
 
         /* ===================================================
-           AI Assistant section
+           AI Assistant & Disclaimers
         =================================================== */
         .ai-section {
-            background: linear-gradient(135deg,
-                rgba(99, 102, 241, 0.06) 0%,
-                rgba(139, 92, 246, 0.06) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            background-color: rgba(139, 92, 246, 0.05) !important; /* subtle purple */
+            border: 1px solid rgba(139, 92, 246, 0.3) !important;
             border-radius: 20px;
-            padding: 1.8rem 2rem;
-            margin-top: 2rem;
+            padding: 2rem;
+            margin-top: 2.5rem;
         }
 
         .ai-section-title {
             font-size: 1.5rem !important;
             font-weight: 700;
-            color: var(--text-color) !important;
-            margin-bottom: 0.5rem;
+            color: var(--primary-purple) !important;
+            margin-bottom: 0.75rem;
         }
 
         .ai-response-box {
-            background-color: var(--background-color) !important;
-            border: 1px solid rgba(139, 92, 246, 0.25);
-            border-radius: 14px;
-            padding: 1.2rem 1.5rem;
-            margin-top: 1rem;
-            line-height: 1.65;
-            font-size: 0.97rem;
+            background-color: var(--card-white) !important;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            line-height: 1.7;
+            font-size: 1rem;
+            color: var(--text-dark) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        /* ===================================================
-           Example question chips
-        =================================================== */
         .question-chips {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 0.75rem 0 1rem 0;
+            gap: 0.75rem;
+            margin: 1rem 0;
         }
 
         .question-chip {
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(139, 92, 246, 0.12));
-            border: 1px solid rgba(139, 92, 246, 0.25);
-            border-radius: 999px;
-            padding: 0.3rem 0.85rem;
-            font-size: 0.82rem;
-            color: var(--text-color);
-            cursor: default;
-            transition: background 0.2s ease;
+            background-color: var(--card-white);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 9999px;
+            padding: 0.4rem 1rem;
+            font-size: 0.875rem;
+            color: var(--primary-purple);
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        /* ===================================================
-           Disclaimer box
-        =================================================== */
         .disclaimer-box {
-            background-color: rgba(239, 68, 68, 0.06) !important;
-            border: 1px solid rgba(239, 68, 68, 0.18) !important;
+            background-color: rgba(239, 68, 68, 0.05) !important; /* subtle red */
+            border: 1px solid rgba(239, 68, 68, 0.3) !important;
             border-radius: 16px;
-            padding: 1.25rem 1.5rem;
-            margin: 2rem 0;
-            color: var(--text-color) !important;
+            padding: 1.5rem;
+            margin: 2.5rem 0 1rem 0;
+            color: #ef4444 !important; /* solid red text */
         }
 
         .disclaimer-box p {
             margin: 0 !important;
             font-size: 0.95rem !important;
-            line-height: 1.5 !important;
+            line-height: 1.6 !important;
+            font-weight: 500;
         }
 
         /* ===================================================
            Footer
         =================================================== */
         .footer {
-            margin-top: 5rem;
-            padding: 2.5rem;
-            border-top: 1px solid var(--secondary-background-color) !important;
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid rgba(128, 128, 128, 0.2) !important;
             text-align: center;
-            font-size: 0.95rem !important;
-            color: var(--text-color) !important;
-            opacity: 0.7;
+            font-size: 0.875rem !important;
+            color: var(--text-muted) !important;
             line-height: 1.6;
         }
 
-        /* ===================================================
-           Responsive
-        =================================================== */
-        @media (max-width: 768px) {
-            .hero-card { padding: 2.5rem 1.5rem; border-radius: 16px; }
-            .hero-card h1 { font-size: 2.5rem !important; }
-            .hero-card p  { font-size: 1.1rem !important; }
-            .metric-card  { padding: 1.25rem; }
-            .metric-card h3 { font-size: 2rem !important; }
-            .feature-card { padding: 1.5rem; }
+        /* Make Streamlit buttons primary blue when inside our forms */
+        div.stButton > button {
+            background-color: var(--primary-blue) !important;
+            color: white !important;
+            font-weight: 600 !important;
+            padding: 0.75rem 1.5rem !important;
+            border-radius: 12px !important;
+            border: none !important;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2) !important;
+            transition: all 0.2s ease !important;
         }
+        div.stButton > button:hover {
+            background-color: #1d4ed8 !important;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3) !important;
+        }
+        
+        div.stDownloadButton > button {
+            background-color: var(--background-color) !important;
+            color: var(--text-dark) !important;
+            border: 1px solid rgba(128, 128, 128, 0.4) !important;
+            font-weight: 600 !important;
+            padding: 0.75rem 1.5rem !important;
+            border-radius: 12px !important;
+            transition: all 0.2s ease !important;
+        }
+        div.stDownloadButton > button:hover {
+            background-color: rgba(128, 128, 128, 0.1) !important;
+        }
+
         </style>
         """,
         unsafe_allow_html=True,
