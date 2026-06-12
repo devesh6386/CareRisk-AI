@@ -61,6 +61,7 @@ with d1:
         """,
         unsafe_allow_html=True,
     )
+    st.page_link("pages/1_Diabetes_Prediction.py", label="Run Diabetes Analysis ➜", use_container_width=True)
 with d2:
     st.markdown(
         """
@@ -71,6 +72,7 @@ with d2:
         """,
         unsafe_allow_html=True,
     )
+    st.page_link("pages/2_Heart_Disease_Prediction.py", label="Run Heart Analysis ➜", use_container_width=True)
 with d3:
     st.markdown(
         """
@@ -81,6 +83,7 @@ with d3:
         """,
         unsafe_allow_html=True,
     )
+    st.page_link("pages/3_Stroke_Prediction.py", label="Run Stroke Analysis ➜", use_container_width=True)
 
 st.markdown('<div class="section-title">⚙️ How it Works</div>', unsafe_allow_html=True)
 

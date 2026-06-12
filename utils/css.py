@@ -102,6 +102,15 @@ def inject_custom_css():
         /* ===================================================
            Feature cards
         =================================================== */
+        /* Coordinate the hover state on the column container so card + button lift in unison */
+        div[data-testid="column"]:has(.feature-card) {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        div[data-testid="column"]:has(.feature-card):hover {
+            transform: translateY(-6px) !important;
+        }
+
         .feature-card {
             background-color: var(--background-color) !important;
             border: 1px solid var(--secondary-background-color) !important;
@@ -109,14 +118,13 @@ def inject_custom_css():
             padding: 2rem;
             height: 100%;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
         }
 
         .feature-card:hover {
-            transform: translateY(-6px);
             box-shadow: 0 20px 35px rgba(0, 0, 0, 0.12);
             border-color: #0284c7 !important;
         }
@@ -134,6 +142,33 @@ def inject_custom_css():
             color: var(--text-color) !important;
             opacity: 0.85;
             margin: 0 !important;
+        }
+
+        /* Cohesive button styling inside the column */
+        div:has(> .feature-card) + div:has(> [data-testid="stPageLink"]) {
+            margin-top: -0.5rem !important;
+        }
+
+        div:has(> .feature-card) + div:has(> [data-testid="stPageLink"]) a {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: linear-gradient(135deg, #0f766e 0%, #0284c7 100%) !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 0.8rem 1.5rem !important;
+            border-radius: 14px !important;
+            text-decoration: none !important;
+            font-weight: 600 !important;
+            font-size: 1rem !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.15) !important;
+        }
+
+        div:has(> .feature-card) + div:has(> [data-testid="stPageLink"]) a:hover {
+            background: linear-gradient(135deg, #0d9488 0%, #0369a1 100%) !important;
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.25) !important;
+            color: #ffffff !important;
         }
 
         /* ===================================================
